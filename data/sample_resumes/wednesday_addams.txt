@@ -1,0 +1,8 @@
+Wednesday Addams
+wednesday.addams@nevermore.edu
++57 300 555 0199
+
+3 years of experience developing web applications.
+
+Technical Skills:
+JS, React.js, NodeJS, Postgres, Git.
