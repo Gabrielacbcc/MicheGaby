@@ -5,6 +5,7 @@ from src.stage1_extraction.technical_skills import (
     extract_databases,
     extract_tools,
 )
+from src.stage1_extraction.history import extract_education, extract_experience
 
 
 def load_sample(name):
@@ -50,3 +51,29 @@ def test_extracts_ml_engineer_skills_from_mary_jane_resume():
 def test_dotted_framework_names_are_not_also_read_as_a_language():
     text = "Skills: React.js, Vue.js, Node.js"
     assert extract_programming_languages(text) == []
+
+
+def test_extracts_single_education_entry_from_wednesday_resume():
+    text = load_sample("wednesday_addams.txt")
+    education = extract_education(text)
+    assert education == [
+        {
+            "degree": "BSc in Computer Science",
+            "institution": "Nevermore Academy",
+            "year": "2024",
+        }
+    ]
+
+
+def test_extracts_two_experience_entries_from_wednesday_resume():
+    text = load_sample("wednesday_addams.txt")
+    experience = extract_experience(text)
+    assert len(experience) == 2
+    assert experience[0]["role"] == "Web Application Developer"
+    assert experience[1]["role"] == "Freelance Developer"
+
+
+def test_education_and_experience_are_empty_without_those_sections():
+    text = "Just a name with no education or experience sections."
+    assert extract_education(text) == []
+    assert extract_experience(text) == []

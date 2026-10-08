@@ -6,3 +6,9 @@ mary.watson@dailybugle.com
 
 Technical Skills:
 Python, Pandas, NumPy, Scikit-learn, TensorFlow, SQL, Git.
+
+Education:
+BSc in Data Science - Midtown Polytechnic (2023)
+
+Experience:
+Machine Learning Engineer - Daily Bugle Analytics (2 years)

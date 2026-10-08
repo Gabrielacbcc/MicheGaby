@@ -21,3 +21,17 @@ This only works because Stage 1 does not need to decide that "JS" and "Javascrip
 The order inside each list matters. A compound name like React.js has to appear before the bare word React, because regex alternation tries each option in the order it is written and stops at the first one that matches at a given position; if React came first, it would match the "React" inside "React.js" and leave the ".js" part behind. Keeping specific, longer names ahead of their shorter, more generic relatives avoids this.
 
 One more case came up while testing: the word boundary check that keeps "JS" from matching inside longer words treats a dot as a boundary too, which means the "js" at the end of "React.js" or "Node.js" looks, on its own, exactly like a standalone mention of the JS language. To avoid counting it twice, under two different categories, a match is dropped whenever it is immediately preceded by a dot with no space before it, since in practice that pattern only shows up at the tail of a dotted framework name, never as a real standalone qualification on its own line.
+
+## Academic qualifications and professional experience
+
+Education and experience are different from the fields above because a single resume can have more than one of each, so the extractor needs to return a list of entries instead of a single value, and each entry has more than one piece of information in it. To keep this manageable, we settled on one line per entry, under a section header, following a fixed shape:
+
+Education: expects lines written as "Degree - Institution (Year)", for example "BSc in Computer Science - Nevermore Academy (2024)".
+
+Experience: expects lines written as "Role - Company (Duration)", for example "Web Application Developer - Nevermore Academy Projects (3 years)".
+
+Finding the right lines is done in two steps. First, _section_lines walks the text line by line, starting right after the header, and collects lines until it hits a blank one, which marks the end of that section. This part is plain text handling rather than a regular expression, since a section is better described as "everything between a header and a blank line" than as a pattern over characters.
+
+Second, each collected line is matched against a dedicated pattern. The education pattern, ^(?P<degree>.+?)\s-\s(?P<institution>.+?)\s\((?P<year>\d{4})\)\s*$, captures three named groups: the degree as whatever text comes before the first " - ", the institution as whatever comes after it and before the opening parenthesis, and the year as exactly four digits inside the parentheses. The experience pattern is the same shape, only the parenthesis now expects a small number followed by the word year or years, (?P<duration>\d+\syears?), since a job entry reports a duration rather than a graduation year. Using named groups instead of a positional match means extract_education and extract_experience can return the parsed fields directly as a dictionary per entry, in the same shape the DSL in Stage 4 will eventually expect.
+
+A resume with no Education: or Experience: header simply yields an empty list for that field. This is deliberate: Stage 1 only reports what it can find, it does not try to guess at an implied education history from the rest of the text.
