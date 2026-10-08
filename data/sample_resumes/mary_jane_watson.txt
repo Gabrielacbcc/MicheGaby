@@ -1,0 +1,8 @@
+Mary Jane Watson
+mary.watson@dailybugle.com
++57 301 222 3344
+
+2 years of experience developing predictive models and data-processing pipelines.
+
+Technical Skills:
+Python, Pandas, NumPy, Scikit-learn, TensorFlow, SQL, Git.
