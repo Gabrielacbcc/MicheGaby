@@ -1,6 +1,9 @@
 import re
 
 EMAIL_PATTERN = r"[\w.+-]+@[\w-]+\.[\w.-]+"
+# Shaped around Colombian numbers, since that is what our sample resumes
+# use: optional country code, then three digit groups, separators optional
+# (matches "+57 300 555 0199" and a bare "3005550199" alike).
 PHONE_PATTERN = r"(?:\+?\d{1,3}[\s-]?)?\d{3}[\s-]?\d{3}[\s-]?\d{4}"
 
 
