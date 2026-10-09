@@ -1,5 +1,7 @@
 import re
 
+# Named groups so a match turns directly into the dict Stage 4 expects
+# per entry, with no separate field-mapping step afterward.
 EDUCATION_ENTRY = re.compile(
     r"^(?P<degree>.+?)\s-\s(?P<institution>.+?)\s\((?P<year>\d{4})\)\s*$"
 )
@@ -9,6 +11,8 @@ EXPERIENCE_ENTRY = re.compile(
 )
 
 
+# A section is "everything between a header and the next blank line",
+# which reads better as plain line scanning than as one regex.
 def _section_lines(text, header):
     """Returns the lines that sit right under a section header such as
     'Education:' or 'Experience:', stopping at the first blank line or the

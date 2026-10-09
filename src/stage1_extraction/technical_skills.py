@@ -2,6 +2,9 @@ import re
 
 PROGRAMMING_LANGUAGES = ["TypeScript", "JavaScript", "JS", "Python"]
 
+# Specific, longer spellings first (React.js before React): alternation
+# stops at the first option that matches, so a generic entry placed
+# earlier would match inside the compound name and leave the rest unread.
 FRAMEWORKS = [
     "React.js", "ReactJS", "React",
     "Angular",
@@ -31,6 +34,8 @@ TOOLS = [
     "Linux",
 ]
 
+# Qualifications named in the reference profiles that are phrases, not a
+# single tool or language name, so they don't belong in the lists above.
 OTHER_QUALIFICATIONS = [
     "RESTful APIs", "REST APIs", "REST API", "RESTful API",
     "Machine-learning model development", "Machine Learning model development",
@@ -54,6 +59,8 @@ def _find_keywords(text, keywords):
     found = []
     for match in re.finditer(pattern, text, re.IGNORECASE):
         start = match.start()
+        # A dot right before the match means this is the tail of a dotted
+        # name (the "js" in "React.js"), not a real standalone keyword.
         if start > 0 and text[start - 1] == ".":
             continue
         term = match.group()
