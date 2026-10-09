@@ -67,7 +67,7 @@ pytest tests/
 ## Tools
 
 - IDE: VSCode
-- Python: Not defined yet 
+- Python: 3.10
 
 ## Submission
 
