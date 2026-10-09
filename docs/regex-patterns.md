@@ -1,0 +1,56 @@
+# Regular Expression Patterns
+
+This document explains the regular expressions behind Stage 1 of the pipeline, one section per field the guide asks the extractor to recognize. It grows together with the code in src/stage1_extraction, so each section here matches one extractor function already present in that package.
+
+## Contact information
+
+The resume text is expected to contain an email address and, usually, a phone number, each on its own line rather than buried inside a sentence. Two independent patterns are used instead of one combined pattern, since the two fields do not have to sit next to each other and either one might be missing from a given resume.
+
+The email pattern is [\w.+-]+@[\w-]+\.[\w.-]+. It matches the ordinary shape of an address: one or more word characters, dots, plus signs or hyphens before the @ sign, then a domain name made of word characters and hyphens, then a dot and at least one more domain segment. This is intentionally looser than a strict RFC compliant pattern, since the goal here is to locate a string that looks like an email inside free text, not to validate a form field.
+
+The phone pattern is (?:\+?\d{1,3}[\s-]?)?\d{3}[\s-]?\d{3}[\s-]?\d{4}. It was written with Colombian numbers in mind, since that is what our sample resumes use: an optional country code of up to three digits, possibly preceded by a plus sign, followed by three digit groups of three, three and four digits that can be separated by spaces, hyphens, or nothing at all. This covers both a longer form such as +57 300 555 0199 and a bare ten digit number such as 3005550199.
+
+extract_contact_info runs both patterns against the full text with re.search, so it finds the first match wherever it occurs instead of requiring the field to sit at a fixed position in the resume, and it returns a dictionary that only includes the keys it actually matched. A resume with no phone number ends up with just an email key, not a phone key set to None, which keeps the output honest about what was actually found in the text.
+
+## Programming languages, frameworks, databases and tools
+
+These four fields are handled together in technical_skills.py because they share the same underlying technique: rather than writing a pattern that describes the general shape of a technology name, which does not really exist, each category is a plain list of the raw spellings we expect to see for that category's qualifications, and the pattern is built by joining that list into a single alternation. Programming languages covers things like JS or Python, frameworks covers React.js or TensorFlow, databases covers Postgres or SQL, and tools covers Git or Docker, following the same split the guide uses in its list of information types.
+
+This only works because Stage 1 does not need to decide that "JS" and "Javascript" are the same qualification, it only needs to notice that something matching one of the known spellings showed up in the text. That equivalence decision belongs to Stage 2, so every raw spelling we are aware of is listed separately here rather than folded into a single term, even when two entries will end up meaning the same thing later.
+
+The order inside each list matters. A compound name like React.js has to appear before the bare word React, because regex alternation tries each option in the order it is written and stops at the first one that matches at a given position; if React came first, it would match the "React" inside "React.js" and leave the ".js" part behind. Keeping specific, longer names ahead of their shorter, more generic relatives avoids this.
+
+One more case came up while testing: the word boundary check that keeps "JS" from matching inside longer words treats a dot as a boundary too, which means the "js" at the end of "React.js" or "Node.js" looks, on its own, exactly like a standalone mention of the JS language. To avoid counting it twice, under two different categories, a match is dropped whenever it is immediately preceded by a dot with no space before it, since in practice that pattern only shows up at the tail of a dotted framework name, never as a real standalone qualification on its own line.
+
+## Other qualifications
+
+Some qualifications named in the reference profiles, such as REST APIs for Full Stack Developer and
+Machine-learning model development for Machine Learning Engineer, are multi-word phrases rather than a
+single technology name, so they do not fit naturally under programming languages, frameworks, databases
+or tools. They are handled by their own list, OTHER_QUALIFICATIONS in technical_skills.py, using the same
+_find_keywords technique as the other categories: a plain alternation over the raw phrasings we expect to
+see, ordered from most specific to most generic ("Machine-learning model development" before the bare
+"model development") so a longer phrase is not cut short by a shorter one nested inside it.
+
+Without this category, two qualifications that the guide explicitly lists for the two predefined profiles would
+never reach Stage 2 or Stage 3, since Stage 1 would simply never produce a string for them.
+
+## Academic qualifications and professional experience
+
+Education and experience are different from the fields above because a single resume can have more than one of each, so the extractor needs to return a list of entries instead of a single value, and each entry has more than one piece of information in it. To keep this manageable, we settled on one line per entry, under a section header, following a fixed shape:
+
+Education: expects lines written as "Degree - Institution (Year)", for example "BSc in Computer Science - Nevermore Academy (2024)".
+
+Experience: expects lines written as "Role - Company (Duration)", for example "Web Application Developer - Nevermore Academy Projects (3 years)".
+
+Finding the right lines is done in two steps. First, _section_lines walks the text line by line, starting right after the header, and collects lines until it hits a blank one, which marks the end of that section. This part is plain text handling rather than a regular expression, since a section is better described as "everything between a header and a blank line" than as a pattern over characters.
+
+Second, each collected line is matched against a dedicated pattern. The education pattern, ^(?P<degree>.+?)\s-\s(?P<institution>.+?)\s\((?P<year>\d{4})\)\s*$, captures three named groups: the degree as whatever text comes before the first " - ", the institution as whatever comes after it and before the opening parenthesis, and the year as exactly four digits inside the parentheses. The experience pattern is the same shape, only the parenthesis now expects a small number followed by the word year or years, (?P<duration>\d+\syears?), since a job entry reports a duration rather than a graduation year. Using named groups instead of a positional match means extract_education and extract_experience can return the parsed fields directly as a dictionary per entry, in the same shape the DSL in Stage 4 will eventually expect.
+
+A resume with no Education: or Experience: header simply yields an empty list for that field. This is deliberate: Stage 1 only reports what it can find, it does not try to guess at an implied education history from the rest of the text.
+
+## Putting it together: extract_all
+
+Every function above is tested on its own, but the rest of the pipeline does not call them one at a time. extract_all, in stage1_extraction's __init__.py, runs all eight of them against the same resume text and collects the results into one ResumeData object, which is the only thing Stage 2 needs to receive from this stage.
+
+Running extract_all against one sample resume per supported profile (Full Stack Developer, Machine Learning Engineer, DevOps Engineer and Data Engineer) confirms that the same code path handles all four without any profile specific branching in Stage 1 itself: a DevOps resume naturally produces an empty programming_languages list and a full tools list, while a Data Engineer resume produces the opposite balance, simply because of which keywords from each category happen to appear in the text. Stage 1 does not know what a profile is, and it does not need to, since that decision is made later, by Stage 2's choice of transducer and Stage 3's choice of automaton for a given profile.

@@ -1,0 +1,15 @@
+Wednesday Addams
+wednesday.addams@nevermore.edu
++57 300 555 0199
+
+3 years of experience developing web applications.
+
+Technical Skills:
+JS, React.js, NodeJS, Postgres, REST APIs, Git.
+
+Education:
+BSc in Computer Science - Nevermore Academy (2024)
+
+Experience:
+Web Application Developer - Nevermore Academy Projects (3 years)
+Freelance Developer - Self-employed (1 year)

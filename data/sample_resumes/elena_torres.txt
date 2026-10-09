@@ -1,0 +1,14 @@
+Elena Torres
+elena.torres@example.com
++57 304 888 1122
+
+3 years of experience building data pipelines and warehousing solutions.
+
+Technical Skills:
+Python, SQL, Airflow, Spark, Snowflake, Git.
+
+Education:
+BSc in Data Engineering - Universidad Icesi (2022)
+
+Experience:
+Data Engineer - Bright Analytics (3 years)

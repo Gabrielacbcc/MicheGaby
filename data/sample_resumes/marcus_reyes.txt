@@ -1,0 +1,14 @@
+Marcus Reyes
+marcus.reyes@example.com
++57 302 444 7788
+
+4 years of experience building CI/CD pipelines and managing cloud infrastructure.
+
+Technical Skills:
+Linux, Docker, Kubernetes, Jenkins, Terraform, AWS, Prometheus, Git.
+
+Education:
+BSc in Systems Engineering - Universidad del Valle (2021)
+
+Experience:
+DevOps Engineer - CloudNine Systems (4 years)
