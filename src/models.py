@@ -15,5 +15,6 @@ class ResumeData:
     frameworks: list = field(default_factory=list)
     databases: list = field(default_factory=list)
     tools: list = field(default_factory=list)
+    other_qualifications: list = field(default_factory=list)
     education: list = field(default_factory=list)
     experience: list = field(default_factory=list)

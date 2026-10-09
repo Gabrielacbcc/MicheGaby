@@ -5,7 +5,7 @@ wednesday.addams@nevermore.edu
 3 years of experience developing web applications.
 
 Technical Skills:
-JS, React.js, NodeJS, Postgres, Git.
+JS, React.js, NodeJS, Postgres, REST APIs, Git.
 
 Education:
 BSc in Computer Science - Nevermore Academy (2024)

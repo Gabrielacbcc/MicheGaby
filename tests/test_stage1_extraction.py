@@ -4,6 +4,7 @@ from src.stage1_extraction.technical_skills import (
     extract_frameworks,
     extract_databases,
     extract_tools,
+    extract_other_qualifications,
 )
 from src.stage1_extraction.history import extract_education, extract_experience
 
@@ -38,6 +39,7 @@ def test_extracts_full_stack_skills_from_wednesday_resume():
     assert extract_frameworks(text) == ["React.js", "NodeJS"]
     assert extract_databases(text) == ["Postgres"]
     assert extract_tools(text) == ["Git"]
+    assert extract_other_qualifications(text) == ["REST APIs"]
 
 
 def test_extracts_ml_engineer_skills_from_mary_jane_resume():
@@ -46,6 +48,17 @@ def test_extracts_ml_engineer_skills_from_mary_jane_resume():
     assert extract_frameworks(text) == ["Pandas", "NumPy", "Scikit-learn", "TensorFlow"]
     assert extract_databases(text) == ["SQL"]
     assert extract_tools(text) == ["Git"]
+    assert extract_other_qualifications(text) == ["Machine-learning model development"]
+
+
+def test_other_qualifications_empty_when_absent():
+    text = load_sample("marcus_reyes.txt")
+    assert extract_other_qualifications(text) == []
+
+
+def test_other_qualifications_recognizes_shorter_variants():
+    text = "Skills: ML model development, REST API design."
+    assert extract_other_qualifications(text) == ["ML model development", "REST API"]
 
 
 def test_dotted_framework_names_are_not_also_read_as_a_language():
@@ -89,6 +102,7 @@ def test_extract_all_on_full_stack_resume():
     assert data.frameworks == ["React.js", "NodeJS"]
     assert data.databases == ["Postgres"]
     assert data.tools == ["Git"]
+    assert data.other_qualifications == ["REST APIs"]
     assert len(data.education) == 1
     assert len(data.experience) == 2
 

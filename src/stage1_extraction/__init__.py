@@ -5,6 +5,7 @@ from src.stage1_extraction.technical_skills import (
     extract_frameworks,
     extract_databases,
     extract_tools,
+    extract_other_qualifications,
 )
 from src.stage1_extraction.history import extract_education, extract_experience
 
@@ -20,6 +21,7 @@ def extract_all(text):
         frameworks=extract_frameworks(text),
         databases=extract_databases(text),
         tools=extract_tools(text),
+        other_qualifications=extract_other_qualifications(text),
         education=extract_education(text),
         experience=extract_experience(text),
     )

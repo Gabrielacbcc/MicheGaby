@@ -22,6 +22,19 @@ The order inside each list matters. A compound name like React.js has to appear 
 
 One more case came up while testing: the word boundary check that keeps "JS" from matching inside longer words treats a dot as a boundary too, which means the "js" at the end of "React.js" or "Node.js" looks, on its own, exactly like a standalone mention of the JS language. To avoid counting it twice, under two different categories, a match is dropped whenever it is immediately preceded by a dot with no space before it, since in practice that pattern only shows up at the tail of a dotted framework name, never as a real standalone qualification on its own line.
 
+## Other qualifications
+
+Some qualifications named in the reference profiles, such as REST APIs for Full Stack Developer and
+Machine-learning model development for Machine Learning Engineer, are multi-word phrases rather than a
+single technology name, so they do not fit naturally under programming languages, frameworks, databases
+or tools. They are handled by their own list, OTHER_QUALIFICATIONS in technical_skills.py, using the same
+_find_keywords technique as the other categories: a plain alternation over the raw phrasings we expect to
+see, ordered from most specific to most generic ("Machine-learning model development" before the bare
+"model development") so a longer phrase is not cut short by a shorter one nested inside it.
+
+Without this category, two qualifications that the guide explicitly lists for the two predefined profiles would
+never reach Stage 2 or Stage 3, since Stage 1 would simply never produce a string for them.
+
 ## Academic qualifications and professional experience
 
 Education and experience are different from the fields above because a single resume can have more than one of each, so the extractor needs to return a list of entries instead of a single value, and each entry has more than one piece of information in it. To keep this manageable, we settled on one line per entry, under a section header, following a fixed shape:
@@ -38,6 +51,6 @@ A resume with no Education: or Experience: header simply yields an empty list fo
 
 ## Putting it together: extract_all
 
-Every function above is tested on its own, but the rest of the pipeline does not call them one at a time. extract_all, in stage1_extraction's __init__.py, runs all seven of them against the same resume text and collects the results into one ResumeData object, which is the only thing Stage 2 needs to receive from this stage.
+Every function above is tested on its own, but the rest of the pipeline does not call them one at a time. extract_all, in stage1_extraction's __init__.py, runs all eight of them against the same resume text and collects the results into one ResumeData object, which is the only thing Stage 2 needs to receive from this stage.
 
 Running extract_all against one sample resume per supported profile (Full Stack Developer, Machine Learning Engineer, DevOps Engineer and Data Engineer) confirms that the same code path handles all four without any profile specific branching in Stage 1 itself: a DevOps resume naturally produces an empty programming_languages list and a full tools list, while a Data Engineer resume produces the opposite balance, simply because of which keywords from each category happen to appear in the text. Stage 1 does not know what a profile is, and it does not need to, since that decision is made later, by Stage 2's choice of transducer and Stage 3's choice of automaton for a given profile.

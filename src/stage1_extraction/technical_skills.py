@@ -31,6 +31,12 @@ TOOLS = [
     "Linux",
 ]
 
+OTHER_QUALIFICATIONS = [
+    "RESTful APIs", "REST APIs", "REST API", "RESTful API",
+    "Machine-learning model development", "Machine Learning model development",
+    "ML model development", "model development",
+]
+
 
 def _find_keywords(text, keywords):
     """Looks for any of the given raw spellings inside text and returns the
@@ -70,3 +76,7 @@ def extract_databases(text):
 
 def extract_tools(text):
     return _find_keywords(text, TOOLS)
+
+
+def extract_other_qualifications(text):
+    return _find_keywords(text, OTHER_QUALIFICATIONS)

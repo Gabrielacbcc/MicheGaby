@@ -5,7 +5,7 @@ mary.watson@dailybugle.com
 2 years of experience developing predictive models and data-processing pipelines.
 
 Technical Skills:
-Python, Pandas, NumPy, Scikit-learn, TensorFlow, SQL, Git.
+Python, Pandas, NumPy, Scikit-learn, TensorFlow, Machine-learning model development, SQL, Git.
 
 Education:
 BSc in Data Science - Midtown Polytechnic (2023)

@@ -37,7 +37,6 @@ four distinct formal language models:
 4. **Data Engineer** (additional — AI/data) — Python, SQL, pipeline orchestration (Airflow), distributed processing (Spark), data warehousing (Snowflake/BigQuery/Redshift), data formats (Parquet/JSON), Git
 
 ## Repository structure
-## Estructura del repositorio
 
 ```
 ResumeLens/
