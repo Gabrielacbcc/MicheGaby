@@ -34,7 +34,7 @@ four distinct formal language models:
 1. **Full Stack Developer** (fixed) — JavaScript/TypeScript, React/Angular/Vue, Node.js/Django/Spring Boot, SQL/NoSQL, REST APIs, Git
 2. **Machine Learning Engineer** (fixed) — Python, Pandas/NumPy, Scikit-learn, TensorFlow/PyTorch, ML model development, SQL, Git
 3. **DevOps Engineer** (additional — software engineering) — Linux, Docker, Kubernetes, CI/CD (Jenkins/GitHub Actions), Terraform/Ansible, cloud (AWS/Azure/GCP), monitoring (Prometheus/Grafana), Git
-4. **Data Engineer** (additional — AI/data) — Python, SQL, pipeline orchestration (Airflow), distributed processing (Spark), data warehousing (Snowflake/BigQuery/Redshift), data formats (Parquet/JSON), Git
+4. **Data Engineer** (additional — AI/data) — Python, SQL, pipeline orchestration (Airflow), distributed processing (Spark), data warehousing (Snowflake/BigQuery/Redshift), data warehousing (Snowflake/BigQuery/Redshift), Git
 
 ## Repository structure
 
