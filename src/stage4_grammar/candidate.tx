@@ -1,0 +1,53 @@
+// ResumeLens candidate profile DSL (textX grammar, EBNF-style).
+// Terminals are regular expressions or quoted keywords; every other rule is a non-terminal.
+
+Candidate:
+    'candidate' (name=NameString | unnamed?='unnamed') '{'
+        contact=Contact
+        education=EducationSection
+        experience=ExperienceSection
+        qualifications+=Qualifications
+        results+=Result
+    '}'
+;
+
+Contact:
+    'contact' '{'
+        ('email' ':' email=Email ';')?
+        ('phone' ':' phone=Phone ';')?
+    '}'
+;
+
+EducationSection:
+    'education' '{' entries*=EducationEntry '}'
+;
+
+EducationEntry:
+    'degree' degree=NameString 'at' institution=NameString 'year' year=Year ';'
+;
+
+ExperienceSection:
+    'experience' '{' entries*=ExperienceEntry '}'
+;
+
+ExperienceEntry:
+    'role' role=NameString 'at' company=NameString 'for' duration=Duration ';'
+;
+
+Qualifications:
+    'qualifications' profile=ProfileName '{' tokens*=Token[','] '}'
+;
+
+Result:
+    'profile' profile=ProfileName ':' status=Status ';'
+;
+
+// ---- terminals ----
+ProfileName: 'FULL_STACK_DEVELOPER' | 'MACHINE_LEARNING_ENGINEER' | 'DEVOPS_ENGINEER' | 'DATA_ENGINEER';
+Status:      'ACCEPTED' | 'REJECTED';
+Token:       /[A-Z][A-Z0-9_]*/;
+Email:       /[\w.+-]+@[\w-]+(\.[\w-]+)+/;
+Phone:       /\+?\d[\d ()-]{5,18}\d/;
+Year:        /(19|20)\d{2}/;
+Duration:    /\d+ years?/;
+NameString:  /"([^"\\\n]|\\.)+"/;
