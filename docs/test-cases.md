@@ -38,3 +38,19 @@ The files in data/sample_resumes/ are the base of the integration tests: wednesd
 - An empty sequence is rejected by every automaton.
 - A sequence in the wrong order (`GIT` first) is rejected.
 - No two categories of the same profile share a token, so every automaton stays deterministic.
+
+## Scenarios (Stage 4)
+
+| Id | Scenario | Input | Expected result |
+|----|----------|-------|-----------------|
+| G1 | Valid profile | any of the four sample resumes | Text accepted by the grammar, four verdicts consistent with Stage 3 |
+| G2 | Malformed e-mail | `email: not-an-email;` | Rejected (lexical rule) |
+| G3 | Year with two digits | `year 24;` | Rejected (lexical rule) |
+| G4 | Unknown status | `profile DATA_ENGINEER: MAYBE;` | Rejected (syntactic rule) |
+| G5 | Verdict that contradicts the automaton | Full Stack REJECTED with a full Full Stack sequence | Rejected (semantic check) |
+| G6 | Token of another profile | `JAVASCRIPT` inside DEVOPS_ENGINEER | Rejected (semantic check) |
+| G7 | Missing verdict | one `profile ...;` line removed | Rejected |
+| G8 | Candidate without name | text `Just text.` | Valid, rendered as "Unnamed candidate", all verdicts REJECTED |
+| G9 | Hostile name | `<script>x</script>` | HTML output shows it escaped |
+| G10 | End to end | `run_pipeline` on Mary Jane Watson | HTML and Markdown show Machine Learning Engineer ACCEPTED |
+
