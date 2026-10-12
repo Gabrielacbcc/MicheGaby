@@ -26,3 +26,18 @@ def extract_contact_info(text):
         contact["phone"] = phone_match.group()
 
     return contact
+
+
+# Two to four words made only of letters (accents, dots, hyphens and apostrophes allowed)
+NAME_PATTERN = re.compile(r"^[^\W\d_]+(?:[.'-]?[^\W\d_]+)*(?:\s+[^\W\d_.'-]+(?:[.'-]?[^\W\d_]+)*){1,3}$")
+
+
+def extract_name(text):
+    """Takes the first non empty line as the candidate name, but only when it
+    looks like a name. If it does not (for example it has digits, an @ or a colon), 
+    an empty string is returned instead of guessing"""
+    for line in text.splitlines():
+        line = line.strip()
+        if line:
+            return line if NAME_PATTERN.match(line) else ""
+    return ""

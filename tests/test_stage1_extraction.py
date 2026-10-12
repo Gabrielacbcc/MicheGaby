@@ -126,3 +126,24 @@ def test_extract_all_on_data_engineer_resume():
     assert data.frameworks == ["Airflow", "Spark"]
     assert data.databases == ["SQL", "Snowflake"]
     assert data.experience[0]["role"] == "Data Engineer"
+
+def test_extracts_name_from_every_sample_resume():
+    from src.stage1_extraction.contact import extract_name
+
+    assert extract_name(load_sample("wednesday_addams.txt")) == "Wednesday Addams"
+    assert extract_name(load_sample("mary_jane_watson.txt")) == "Mary Jane Watson"
+    assert extract_name(load_sample("marcus_reyes.txt")) == "Marcus Reyes"
+    assert extract_name(load_sample("elena_torres.txt")) == "Elena Torres"
+
+def test_name_is_empty_when_the_first_line_is_not_a_name():
+    from src.stage1_extraction.contact import extract_name
+
+    assert extract_name("wednesday@example.com\nWednesday Addams") == ""
+    assert extract_name("Technical Skills: Python, Git") == ""
+    assert extract_name("") == ""
+
+
+def test_extract_all_includes_the_name():
+    from src.stage1_extraction import extract_all
+
+    assert extract_all(load_sample("elena_torres.txt")).name == "Elena Torres"

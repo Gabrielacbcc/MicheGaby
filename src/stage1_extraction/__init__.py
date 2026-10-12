@@ -1,5 +1,5 @@
 from src.models import ResumeData
-from src.stage1_extraction.contact import extract_contact_info
+from src.stage1_extraction.contact import extract_contact_info, extract_name
 from src.stage1_extraction.technical_skills import (
     extract_programming_languages,
     extract_frameworks,
@@ -16,6 +16,7 @@ def extract_all(text):
     pipeline expects as the output of this stage.
     """
     return ResumeData(
+        name=extract_name(text),
         contact=extract_contact_info(text),
         programming_languages=extract_programming_languages(text),
         frameworks=extract_frameworks(text),
