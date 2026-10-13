@@ -24,7 +24,7 @@ class ResumeData:
 class AnalysisResult:
     """Stores the results from stages 1 through 3.
     Stage 4 uses this information to create the candidate's profile. 
-    "normalized” stores the sorted technologies for each profile, and “classification” indicates whether each profile is True or False"""
+    "normalized" stores the sorted technologies for each profile, and "classification" indicates whether each profile is True or False"""
 
     resume: ResumeData
     normalized: dict = field(default_factory=dict)

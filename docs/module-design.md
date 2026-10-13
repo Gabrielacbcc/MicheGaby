@@ -20,9 +20,9 @@ normalize_term(term, transducer) takes one raw string, such as "JS", and the tra
 
 normalize_all(terms, profile) takes the raw qualification list from Stage 1 and a profile name, builds or reuses that profile's transducer, and returns the list of canonical tokens, preserving duplicates and unrecognized terms exactly as normalize_term would produce them one at a time.
 
-canonical_order(profile) takes a profile name and returns the fixed category order defined for it, for example Frontend, Backend, Database, Version control for Full Stack Developer.
+canonical_order(profile) takes a profile name and returns the fixed category order defined for it, for example Frontend, Backend, Database, Version control for Full Stack Developer. This is a coarser, category-level summary (for example it collapses "classic ml library" and "deep learning library" into a single Machine learning entry for Machine Learning Engineer) and is used on its own, for instance to show the category order of a profile; it is not the mechanism sort_normalized uses internally.
 
-sort_normalized(terms, profile) takes the normalized list from normalize_all and the profile name, and returns that list reordered according to canonical_order, which is the representation Stage 3 expects as input.
+sort_normalized(terms, profile) takes the normalized list from normalize_all and the profile name, and returns that list reordered according to token_rank(profile), which follows the exact order of the entries defined for that profile in PROFILES (src/profiles.py), not the coarser category grouping from canonical_order. This is the representation Stage 3 expects as input.
 
 ## Stage 3: recognition (src/stage3_recognition)
 
